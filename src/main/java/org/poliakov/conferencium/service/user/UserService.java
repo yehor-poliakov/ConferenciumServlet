@@ -7,4 +7,5 @@ public interface UserService {
     User getUserByCredentials(String email, String password);
     User findUserByEmail(String email);
     User findUserById(Long id);
+    boolean isParticipant(Long userId, Long conferenceId);
 }

@@ -14,5 +14,5 @@ public interface ServletCommand {
      * @param params   parameters to be parsed by regex
      * @return         view
      */
-    String execute(HttpServletRequest request, HttpServletResponse response, String[] ...params);
+    String execute(HttpServletRequest request, HttpServletResponse response, String[] params);
 }

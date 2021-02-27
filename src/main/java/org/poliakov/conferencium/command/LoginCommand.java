@@ -18,10 +18,10 @@ import java.util.HashSet;
 public class LoginCommand implements ServletCommand {
     private static final Logger LOGGER = Logger.getLogger(LoginCommand.class);
 
-    private static UserService userService;
+    private final UserService userService;
 
-    private static String loginPage;
-    private static String mainPage;
+    private final String loginPage;
+    private final String mainPageRedirect;
 
     public LoginCommand(){
         LOGGER.info("Starting LoginCommand");
@@ -29,13 +29,14 @@ public class LoginCommand implements ServletCommand {
         userService = new UserServiceImpl(MysqlUserDaoImpl.getInstance());
 
         loginPage = PageMappingProperties.LOGIN_PAGE;
-        mainPage = PageMappingProperties.CONFERENCES_PAGE;
+        mainPageRedirect = PageMappingProperties.MAIN_PAGE_REDIRECT;
     }
 
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[] ...params) {
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         LOGGER.info("Executing command");
 
-        String resultPage = mainPage;
+        String resultPage = loginPage;
 
         if (request.getParameter("email") != null && request.getParameter("password") != null) {
             User user = userService.getUserByCredentials(request.getParameter("email"),
@@ -44,15 +45,17 @@ public class LoginCommand implements ServletCommand {
             if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("email", user.getEmail());
+                session.setAttribute("id", user.getId());
                 session.setAttribute("username", user.getFirstName() + " " + user.getLastName());
                 session.setAttribute("authenticated", true);
                 session.setAttribute("role", user.getRole().toString());
 
                 HashSet<String> users = (HashSet<String>)request.getServletContext().getAttribute("loggedUsers");
                 users.add(user.getEmail());
+
+                resultPage = mainPageRedirect;
             } else {
                 request.setAttribute("loginSuccess", false);
-                resultPage = loginPage;
             }
         }
 

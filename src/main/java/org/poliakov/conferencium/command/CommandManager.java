@@ -3,7 +3,9 @@ package org.poliakov.conferencium.command;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,16 +27,15 @@ public class CommandManager {
 
         getCommands.put("/", new GetConferencesPageCommand());
         getCommands.put("/login", new GetLoginPageCommand());
-
         getCommands.put("/registration", new GetRegistrationPageCommand());
         getCommands.put("/conferences", new GetConferencesPageCommand());
+        getCommands.put("/conference/create", new GetCreateConferencePageCommand());
+        getCommands.put("/conference/(\\d+)", new GetConferencePageCommand());
         getCommands.put("/cabinet", new GetCabinetPageCommand());
-        getCommands.put("/conference/\\d*", new GetConferencePageCommand());
 
         postCommands.put("/login", new LoginCommand());
         postCommands.put("/logout", new LogoutCommand());
         postCommands.put("/registration", new RegistrationCommand());
-
     }
 
     /**
@@ -43,18 +44,8 @@ public class CommandManager {
      * @param request http request
      * @return servlet command
      */
-    public ServletCommand getGetCommand(HttpServletRequest request) {
-        String command = getMapping(request);
-
-        LOGGER.info("Instantiating command " + command);
-
-        for (String key : getCommands.keySet()) {
-            if (command.matches(key)) {
-                return getCommands.get(key);
-            }
-        }
-
-        return getCommands.get("/");
+    public Optional<ServletCommandInfo> getGetCommand(HttpServletRequest request) {
+        return getCommandInfo(request, getCommands);
     }
 
     /**
@@ -63,21 +54,36 @@ public class CommandManager {
      * @param request http request
      * @return servlet command
      */
-    public ServletCommand getPostCommand(HttpServletRequest request) {
+    public Optional<ServletCommandInfo> getPostCommand(HttpServletRequest request) {
+        return getCommandInfo(request, postCommands);
+    }
+
+    private Optional<ServletCommandInfo> getCommandInfo(HttpServletRequest request, HashMap<String, ServletCommand> commands) {
         String command = getMapping(request);
 
         LOGGER.info("Instantiating command " + command);
 
-        for (String key : postCommands.keySet()) {
-            Pattern pattern = Pattern.compile(key);
-            Matcher m = pattern.matcher(command);
+        for (String key : commands.keySet()) {
+            Pattern pattern = Pattern.compile("^" + key + "$");
+            Matcher matcher = pattern.matcher(command);
 
-            if (m.find()) {
-                return postCommands.get(key);
+            if (matcher.find()) {
+                ServletCommand servletCommand = commands.get(key);
+                String[] params = extractParams(matcher);
+                ServletCommandInfo result = new ServletCommandInfo(servletCommand, params);
+                return Optional.of(result);
             }
         }
 
-        return postCommands.get("/");
+        return Optional.empty();
+    }
+
+    private String[] extractParams(Matcher matcher) {
+        String[] params = new String[matcher.groupCount()];
+        for (int i = 0; i < matcher.groupCount(); i++) {
+            params[i] = matcher.group(i + 1);
+        }
+        return params;
     }
 
     /**

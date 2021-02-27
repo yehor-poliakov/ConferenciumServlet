@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="custom" %>
+<%@ taglib uri="/WEB-INF/localdate.tld" prefix="d"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 
@@ -48,17 +49,7 @@
                         <td>${presentation.presentationTopic}</td>
                         <td>${presentation.conferenceLocation}</td>
                         <td>
-                            <c:if test="${pageContext.response.locale == 'en'}">
-                                <fmt:parseDate value="${presentation.conferenceDate}"
-                                               pattern="yyyy-MM-dd"
-                                               var="parsedDate" type="date"
-                                               parseLocale="en"/>
-                                <fmt:formatDate value="${parsedDate}" type="date"
-                                                pattern="MMM-dd-yyyy"/>
-                            </c:if>
-                            <c:if test="${pageContext.response.locale == 'ua'}">
-                                ${presentation.conferencedate}
-                            </c:if>
+                            <d:localdate date="${presentation.conferenceDate}" locale="${pageContext.response.locale}"/>
                         </td>
                         <td>${presentation.presentationTime}</td>
                         <td>

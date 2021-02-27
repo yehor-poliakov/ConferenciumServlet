@@ -17,10 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 public class GetCabinetPageCommand implements ServletCommand {
     private static final Logger LOGGER = Logger.getLogger(GetCabinetPageCommand.class);
 
-    private static PresentationService presentationService;
-    private static UserService userService;
+    private final PresentationService presentationService;
+    private final UserService userService;
 
-    private static String cabinetPage;
+    private final String cabinetPage;
 
     public GetCabinetPageCommand() {
         LOGGER.info("Starting GetCabinetPageCommand");
@@ -31,8 +31,8 @@ public class GetCabinetPageCommand implements ServletCommand {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[]... params) {
-        String email = (String) request.getSession().getAttribute("email");
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+        Long speakerId = (Long) request.getSession().getAttribute("id");
 
         String pageNumberStr = request.getParameter("pageNumber");
         Integer pageNumber = pageNumberStr == null ? 1 : Integer.parseInt(pageNumberStr);
@@ -40,7 +40,6 @@ public class GetCabinetPageCommand implements ServletCommand {
         String pageSizeStr = request.getParameter("pageSize");
         Integer pageSize = pageSizeStr == null ? 10 : Integer.parseInt(pageSizeStr);
 
-        Long speakerId = userService.findUserByEmail(email).getId();
         Page<PresentationDetails> page = presentationService.findAllBySpeakerId(speakerId, pageNumber, pageSize);
         request.setAttribute("page", page);
         return cabinetPage;

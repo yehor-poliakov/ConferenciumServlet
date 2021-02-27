@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="custom" %>
+<%@ taglib uri="/WEB-INF/localdate.tld" prefix="d"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 
@@ -17,17 +18,7 @@
                 <h1>${conference.title}</h1>
                 <p>${conference.location}</p>
                 <p>
-                    <c:if test="${pageContext.response.locale == 'en'}">
-                        <fmt:parseDate value="${conference.date}"
-                                       pattern="yyyy-MM-dd"
-                                       var="parsedDate" type="date"
-                                       parseLocale="en"/>
-                        <fmt:formatDate value="${parsedDate}" type="date"
-                                        pattern="MMM-dd-yyyy"/>
-                    </c:if>
-                    <c:if test="${pageContext.response.locale == 'ua'}">
-                        ${conference.date}
-                    </c:if>
+                    <d:localdate date="${conference.date}" locale="${pageContext.response.locale}"/>
                 </p>
 
                 <c:if test="${sessionScope.role == 'MODERATOR'}">
@@ -37,13 +28,13 @@
                 </c:if>
 
                 <c:if test="${sessionScope.role == 'PARTICIPANT'}">
-                    <c:if test="${!conference.registered}">
+                    <c:if test="${!registered}">
                         <form action="/conference/${conference.id}/signup" method="post">
                             <button class="btn btn-primary" type="submit"><fmt:message key="registerButton"
                                                                                        bundle="${bundle}"/></button>
                         </form>
                     </c:if>
-                    <c:if test="${conference.registered}">
+                    <c:if test="${registered}">
                         <form action="/conference/${conference.id}/signout" method="post">
                             <button class="btn btn-danger" type="submit"><fmt:message key="unregisterButton"
                                                                                       bundle="${bundle}"/></button>
@@ -72,47 +63,48 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${presentations}" var="presentation">
-                    <tr style="transform: rotate(0);">
-                        <th scope="col">
-                            <c:if test="${sessionScope.role == 'MODERATOR'}">
-                                <a href="presentation/${presentation.id}">${presentation.topic}&nbsp;</a>
-                            </c:if>
-                            <c:if test="${sessionScope.role == 'SPEAKER' || sessionScope.role == 'PARTICIPANT'}">
-                                <b>${presentation.topic}</b>
-                            </c:if>
-                        </th>
-                        <td th:text="${presentation.time}"></td>
+                        <c:forEach items="${presentations}" var="presentation">
+                            <tr style="transform: rotate(0);">
+                                <th scope="col">
+                                    <c:if test="${sessionScope.role == 'MODERATOR'}">
+                                        <a href="presentation/${presentation.id}">${presentation.topic}&nbsp;</a>
+                                    </c:if>
+                                    <c:if test="${sessionScope.role != 'MODERATOR'}">
+                                        <b>${presentation.topic}</b>
+                                    </c:if>
+                                </th>
+                                <td>${presentation.time}</td>
 
-                        <c:if test="${presentation.speaker == ''}">
-                            <td>
-                                <c:if test="${sessionScope.role == 'SPEAKER'}">
-                                    <form action="presentation/${presentation.id}/suggest-speaker" method="post">
-                                        <button class="btn-primary" type="submit"><fmt:message
-                                                key="speakerApplyInscription" bundle="${bundle}"/></button>
-                                    </form>
+                                <c:if test="${presentation.speaker == ''}">
+                                    <td>
+                                        <c:if test="${sessionScope.role == 'SPEAKER'}">
+                                            <form action="presentation/${presentation.id}/suggest-speaker" method="post">
+                                                <button class="btn-primary" type="submit"><fmt:message
+                                                        key="speakerApplyInscription" bundle="${bundle}"/></button>
+                                            </form>
+                                        </c:if>
+                                    </td>
                                 </c:if>
-                            </td>
-                        </c:if>
-                        <c:if test="${presentation.speaker != ''}">
-                            <td>${presentation.speaker}</td>
-                        </c:if>
-                        <c:if test="${sessionScope.role == 'SPEAKER' || sessionScope.role == 'MODERATOR'}">
-                            <td><input type="checkbox" disabled ${presentation.speakerApproved ? 'checked' : ''}/></td>
-                            <td><input type="checkbox" disabled ${presentation.presentationApproved ? 'checked' : ''}/>
-                            </td>
-                        </c:if>
+                                <c:if test="${presentation.speaker != ''}">
+                                    <td>${presentation.speaker}</td>
+                                </c:if>
+                                <c:if test="${sessionScope.role == 'SPEAKER' || sessionScope.role == 'MODERATOR'}">
+                                    <td><input type="checkbox" disabled checked="${presentation.speakerApproved}"/></td>
+                                    <td><input type="checkbox" disabled checked="${presentation.presentationApproved}"/>
+                                    </td>
+                                </c:if>
 
-                        <c:if test="${sessionScope.role == 'MODERATOR'}">
-                            <td>
-                                <form action="presentation/${presentation.id}/delete" method="post">
-                                    <button class="btn btn-danger mt-1" type="submit">
-                                        <fmt:message key="deletePresentationButton" bundle="${bundle}"/>
-                                    </button>
-                                </form>
-                            </td>
-                        </c:if>
-                    </tr>
+                                <c:if test="${sessionScope.role == 'MODERATOR'}">
+                                    <td>
+                                        <form action="presentation/${presentation.id}/delete" method="post">
+                                            <button class="btn btn-danger mt-1" type="submit">
+                                                <fmt:message key="deletePresentationButton" bundle="${bundle}"/>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </c:if>
+                            </tr>
+                         </c:forEach>
                     </tbody>
                 </table>
             </div>

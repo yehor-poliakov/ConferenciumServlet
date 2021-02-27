@@ -3,7 +3,10 @@ package org.poliakov.conferencium.service.user;
 import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 import org.poliakov.conferencium.dao.user.UserDao;
+import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.model.user.User;
+
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
@@ -62,5 +65,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return userDao.findUserById(id);
+    }
+
+    @Override
+    public boolean isParticipant(Long userId, Long conferenceId) {
+        if (userId == null) {
+            return false;
+        }
+        boolean isParticipant = userDao.isParticipant(userId, conferenceId);
+        return isParticipant;
     }
 }

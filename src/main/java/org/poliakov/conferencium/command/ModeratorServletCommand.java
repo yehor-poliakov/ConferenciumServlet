@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public abstract class ModeratorServletCommand implements ServletCommand {
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[] ...params) {
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         if (!Auth.hasRole(request, UserRole.MODERATOR)) {
             request.setAttribute("loginSuccess", false);
             return PageMappingProperties.LOGIN_PAGE;
@@ -18,5 +18,5 @@ public abstract class ModeratorServletCommand implements ServletCommand {
         return moderatorExecute(request, response, params);
     }
 
-    protected abstract String moderatorExecute(HttpServletRequest request, HttpServletResponse response, String[] ...params);
+    protected abstract String moderatorExecute(HttpServletRequest request, HttpServletResponse response, String[] params);
 }

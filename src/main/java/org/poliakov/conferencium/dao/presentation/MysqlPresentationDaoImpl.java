@@ -57,12 +57,12 @@ public class MysqlPresentationDaoImpl implements PresentationDao {
 
         try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(createQuery, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, presentation.getConferenceId().toString());
-            statement.setString(2, presentation.getSpeakerId().toString());
+            statement.setLong(1, presentation.getConferenceId());
+            statement.setLong(2, presentation.getSpeakerId());
             statement.setString(3, presentation.getTime().toString());
             statement.setString(4, presentation.getTopic());
-            statement.setString(5, presentation.isSpeakerApproved().toString());
-            statement.setString(6, presentation.isPresentationApproved().toString());
+            statement.setBoolean(5, presentation.isSpeakerApproved());
+            statement.setBoolean(6, presentation.isPresentationApproved());
 
             int affectedRows = statement.executeUpdate();
 
@@ -92,12 +92,12 @@ public class MysqlPresentationDaoImpl implements PresentationDao {
 
         try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(updateQuery);
-            statement.setString(1, presentation.getSpeakerId().toString());
+            statement.setLong(1, presentation.getSpeakerId());
             statement.setString(2, presentation.getTime().toString());
             statement.setString(3, presentation.getTopic());
-            statement.setString(4, presentation.isSpeakerApproved().toString());
-            statement.setString(5, presentation.isPresentationApproved().toString());
-            statement.setString(6, presentation.getId().toString());
+            statement.setBoolean(4, presentation.isSpeakerApproved());
+            statement.setBoolean(5, presentation.isPresentationApproved());
+            statement.setLong(6, presentation.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -233,15 +233,6 @@ public class MysqlPresentationDaoImpl implements PresentationDao {
         }
 
         return presentation;
-    }
-
-    private Presentation getConference(ResultSet resultSet) {
-        List<Presentation> presentations = getPresentations(resultSet);
-        if (presentations.size() == 1) {
-            return presentations.get(0);
-        } else {
-            return null;
-        }
     }
 
     private List<Presentation> getPresentations(ResultSet resultSet) {

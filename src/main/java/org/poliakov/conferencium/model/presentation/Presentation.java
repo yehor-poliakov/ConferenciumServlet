@@ -55,7 +55,7 @@ public class Presentation {
         this.speakerId = speakerId;
     }
 
-    public Boolean isPresentationApproved() {
+    public boolean isPresentationApproved() {
         return presentationApproved;
     }
 
@@ -71,7 +71,7 @@ public class Presentation {
         this.conferenceId = conferenceId;
     }
 
-    public Boolean isSpeakerApproved() {
+    public boolean isSpeakerApproved() {
         return speakerApproved;
     }
 

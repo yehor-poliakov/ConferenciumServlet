@@ -18,10 +18,10 @@ import java.util.Arrays;
 public class GetConferencesPageCommand implements ServletCommand {
     private static final Logger LOGGER = Logger.getLogger(GetConferencesPageCommand.class);
 
-    private static ConferenceService conferenceService;
-    private static RequestParser requestParser;
+    private final ConferenceService conferenceService;
+    private final RequestParser requestParser;
 
-    private static String conferencesPage;
+    private final String conferencesPage;
 
     public GetConferencesPageCommand() {
         LOGGER.info("Starting GetConferencesPageCommand");
@@ -33,7 +33,7 @@ public class GetConferencesPageCommand implements ServletCommand {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[]... params) {
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         ConferenceSearchFilters filters = requestParser.parseFilters(request);
         Page<Conference> page = conferenceService.findAll(filters);
         request.setAttribute("page", page);

@@ -1,10 +1,9 @@
 package org.poliakov.conferencium.util;
 
-import org.poliakov.conferencium.model.conference.ConferenceSearchFilters;
-import org.poliakov.conferencium.model.conference.ConferenceSearchFiltersBuilder;
-import org.poliakov.conferencium.model.conference.ConferenceSortType;
+import org.poliakov.conferencium.model.conference.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 
 public class RequestParser {
     public ConferenceSearchFilters parseFilters(HttpServletRequest request) {
@@ -42,6 +41,23 @@ public class RequestParser {
         if (pageSizeStr != null) {
             Integer pageSize = Integer.parseInt(pageSizeStr);
             builder.setPageSize(pageSize);
+        }
+
+        return builder.build();
+    }
+
+    public Conference parseConference(HttpServletRequest request) {
+        ConferenceBuilder builder = new ConferenceBuilder();
+
+        String title = request.getParameter("title");
+        builder.setTitle(title);
+
+        String location = request.getParameter("location");
+        builder.setLocation(location);
+
+        String dateStr = request.getParameter("date");
+        if (dateStr != null) {
+            builder.setDate(LocalDate.parse(dateStr));
         }
 
         return builder.build();

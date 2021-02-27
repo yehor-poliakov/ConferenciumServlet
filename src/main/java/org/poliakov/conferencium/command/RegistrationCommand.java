@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 public class RegistrationCommand implements ServletCommand {
     private static final Logger LOGGER = Logger.getLogger(RegistrationCommand.class);
 
-    private static UserService userService;
+    private final UserService userService;
 
-    private static String registrationPage;
-    private static String loginPage;
+    private final String registrationPage;
+    private final String loginPage;
 
     public RegistrationCommand() {
         LOGGER.info("Starting LoginCommand");
@@ -32,8 +32,10 @@ public class RegistrationCommand implements ServletCommand {
         loginPage = PageMappingProperties.LOGIN_PAGE;
     }
 
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[]... params) {
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         LOGGER.info("Executing command");
+        String resultPage = registrationPage;
 
         if ((userService.findUserByEmail(request.getParameter("email")) == null)) {
             LOGGER.info("Registering new user");
@@ -45,10 +47,11 @@ public class RegistrationCommand implements ServletCommand {
                     .setRole(UserRole.PARTICIPANT)
                     .build();
             userService.registerUser(user);
-            return loginPage;
+            resultPage = loginPage;
         } else {
-            return registrationPage;
+            request.setAttribute("userExists", true);
         }
 
+        return resultPage;
     }
 }

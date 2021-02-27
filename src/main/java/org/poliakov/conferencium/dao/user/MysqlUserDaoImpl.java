@@ -8,17 +8,19 @@ import org.poliakov.conferencium.model.user.UserRole;
 import org.poliakov.conferencium.properties.MysqlQueryProperties;
 
 import java.sql.*;
+import java.util.List;
 
 public class MysqlUserDaoImpl implements UserDao {
     private static final Logger LOGGER = Logger.getLogger(MysqlUserDaoImpl.class);
 
     private static MysqlUserDaoImpl INSTANCE;
-    private static ConnectionPool connectionPool;
+    private final ConnectionPool connectionPool;
 
-    private static String createQuery;
-    private static String findByIdQuery;
-    private static String findByEmailQuery;
-    private static String findByEmailAndPasswordQuery;
+    private final String createQuery;
+    private final String findByIdQuery;
+    private final String findByEmailQuery;
+    private final String findByEmailAndPasswordQuery;
+    private final String isParticipantQuery;
 
     public MysqlUserDaoImpl() {
         LOGGER.info("Starting MysqlUserDaoImpl");
@@ -30,6 +32,7 @@ public class MysqlUserDaoImpl implements UserDao {
         findByIdQuery = properties.getProperty("findUserById");
         findByEmailQuery = properties.getProperty("findUserByEmail");
         findByEmailAndPasswordQuery = properties.getProperty("findUserByEmailAndPassword");
+        isParticipantQuery = properties.getProperty("isParticipant");
     }
 
     public static MysqlUserDaoImpl getInstance() {
@@ -131,6 +134,25 @@ public class MysqlUserDaoImpl implements UserDao {
         }
 
         return user;
+    }
+
+    @Override
+    public boolean isParticipant(Long userId, Long conferenceId) {
+        try(Connection connection = connectionPool.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(isParticipantQuery);
+            statement.setLong(1, userId);
+            statement.setLong(2, conferenceId);
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                return result.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+
+        return false;
     }
 
     private User getUser(ResultSet resultSet) {

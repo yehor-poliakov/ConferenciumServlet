@@ -10,14 +10,15 @@ public class GetMainPageCommand implements ServletCommand {
 
     private static final Logger LOGGER = Logger.getLogger(GetMainPageCommand.class);
 
-    private static String page;
+    private final String page;
 
     public GetMainPageCommand(){
         LOGGER.info("Starting GetMainPageCommand");
         page = PageMappingProperties.MAIN_PAGE;
     }
 
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[] ...params) {
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         LOGGER.info("Executing command");
         return page;
     }

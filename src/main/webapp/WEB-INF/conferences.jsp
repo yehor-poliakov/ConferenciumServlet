@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="custom" %>
+<%@ taglib uri="/WEB-INF/localdate.tld" prefix="d"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 
@@ -84,17 +85,7 @@
                                                     <li class="list-group-item">
                                                         <fmt:message key="DateInscription" bundle="${bundle}"/>
                                                         :&nbsp;
-                                                        <c:if test="${pageContext.response.locale == 'en'}">
-                                                            <fmt:parseDate value="${conference.date}"
-                                                                           pattern="yyyy-MM-dd"
-                                                                           var="parsedDate" type="date"
-                                                                           parseLocale="en"/>
-                                                            <fmt:formatDate value="${parsedDate}" type="date"
-                                                                            pattern="MMM-dd-yyyy"/>
-                                                        </c:if>
-                                                        <c:if test="${pageContext.response.locale == 'ua'}">
-                                                            ${conference.date}
-                                                        </c:if>
+                                                        <d:localdate date="${conference.date}" locale="${pageContext.response.locale}"/>
                                                     </li>
                                                     <li class="list-group-item">
                                                         <fmt:message key="PresentationsNumberInscription"
@@ -109,7 +100,7 @@
                                                             ${conference.participantsCount}
                                                     </li>
                                                 </ul>
-                                                <a href="${conference.id}" class="btn btn-primary link">
+                                                <a href="conference/${conference.id}" class="btn btn-primary link">
                                                     <fmt:message key="viewButton" bundle="${bundle}"/>
                                                 </a>
 

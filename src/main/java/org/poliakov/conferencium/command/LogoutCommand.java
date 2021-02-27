@@ -13,19 +13,19 @@ import javax.servlet.http.HttpSession;
 public class LogoutCommand implements ServletCommand {
     private static final Logger LOGGER = Logger.getLogger(LogoutCommand.class);
 
-    private static String mainPage;
+    private final String page;
 
     public LogoutCommand() {
         LOGGER.info("Starting LogoutCommand");
-
-        mainPage = PageMappingProperties.CONFERENCES_PAGE;
+        page = PageMappingProperties.MAIN_PAGE_REDIRECT;
     }
 
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[]... params) {
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         LOGGER.info("Executing command");
 
         HttpSession session = request.getSession();
         session.invalidate();
-        return mainPage;
+        return page;
     }
 }
