@@ -25,13 +25,16 @@ public class CommandManager {
 
         getCommands.put("/", new GetConferencesPageCommand());
         getCommands.put("/login", new GetLoginPageCommand());
+
         getCommands.put("/registration", new GetRegistrationPageCommand());
         getCommands.put("/conferences", new GetConferencesPageCommand());
         getCommands.put("/cabinet", new GetCabinetPageCommand());
-        getCommands.put("/conference/(\\d+)", new GetConferencePageCommand());
+        getCommands.put("/conference/\\d*", new GetConferencePageCommand());
 
         postCommands.put("/login", new LoginCommand());
+        postCommands.put("/logout", new LogoutCommand());
         postCommands.put("/registration", new RegistrationCommand());
+
     }
 
     /**

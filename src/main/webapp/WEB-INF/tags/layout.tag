@@ -64,6 +64,16 @@
                             </button>
                         </form>
                     </c:if>
+                    <div class="my-2 my-lg-0 ml-2">
+                        <c:if test="${sessionScope.authenticated != true}">
+                            <form class="form-inline my-2 my-lg-0" action="${pageContext.request.contextPath}/login">
+                                <button class="btn btn-primary my-2 my-sm-0" type="submit">
+                                    <fmt:message key="signin" bundle="${bundle}"/>
+                                </button>
+                            </form>
+                        </c:if>
+                    </div>
+
                 </div>
             </div>
         </nav>

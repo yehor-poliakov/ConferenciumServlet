@@ -48,8 +48,17 @@
                         <td>${presentation.presentationTopic}</td>
                         <td>${presentation.conferenceLocation}</td>
                         <td>
-                            <fmt:parseDate value="${presentation.conferenceDate}" pattern="yyyy-MM-dd" var="parsedDate" type="date" parseLocale="en_GB" />
-                            <fmt:formatDate value="${parsedDate}" type="date" pattern="dd-MMM-yyyy"/>
+                            <c:if test="${pageContext.response.locale == 'en'}">
+                                <fmt:parseDate value="${presentation.conferenceDate}"
+                                               pattern="yyyy-MM-dd"
+                                               var="parsedDate" type="date"
+                                               parseLocale="en"/>
+                                <fmt:formatDate value="${parsedDate}" type="date"
+                                                pattern="MMM-dd-yyyy"/>
+                            </c:if>
+                            <c:if test="${pageContext.response.locale == 'ua'}">
+                                ${presentation.conferencedate}
+                            </c:if>
                         </td>
                         <td>${presentation.presentationTime}</td>
                         <td>

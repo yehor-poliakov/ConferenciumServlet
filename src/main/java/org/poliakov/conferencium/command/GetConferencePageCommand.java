@@ -22,10 +22,8 @@ import java.util.List;
 
 public class GetConferencePageCommand implements ServletCommand {
     private static final Logger LOGGER = Logger.getLogger(GetConferencePageCommand.class);
-
     private static ConferenceService conferenceService;
     private static PresentationService presentationService;
-
     private static String page;
 
     public GetConferencePageCommand() {
@@ -39,8 +37,8 @@ public class GetConferencePageCommand implements ServletCommand {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, String[]... params) {
-        String id = (String) Arrays.stream(request.getContextPath().split("/")).toArray()[1];
-        Long conferenceId = Long.parseLong(id);
+        String[] path = request.getRequestURI().split("/");
+        Long conferenceId = Long.parseLong(path[3]);
 
         Conference conference = conferenceService.getConferenceById(conferenceId);
         List<Presentation> presentations = presentationService.findAllByConferenceId(conferenceId);

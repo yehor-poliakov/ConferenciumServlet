@@ -35,7 +35,7 @@ public class LoginCommand implements ServletCommand {
     public String execute(HttpServletRequest request, HttpServletResponse response, String[] ...params) {
         LOGGER.info("Executing command");
 
-        String resultPage = loginPage;
+        String resultPage = mainPage;
 
         if (request.getParameter("email") != null && request.getParameter("password") != null) {
             User user = userService.getUserByCredentials(request.getParameter("email"),
@@ -50,10 +50,9 @@ public class LoginCommand implements ServletCommand {
 
                 HashSet<String> users = (HashSet<String>)request.getServletContext().getAttribute("loggedUsers");
                 users.add(user.getEmail());
-
-                resultPage = mainPage;
             } else {
                 request.setAttribute("loginSuccess", false);
+                resultPage = loginPage;
             }
         }
 

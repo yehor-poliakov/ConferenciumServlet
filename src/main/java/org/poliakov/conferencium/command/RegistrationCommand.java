@@ -11,8 +11,6 @@ import org.poliakov.conferencium.service.user.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.HashSet;
 
 /**
  * User registration via POST requests
@@ -34,11 +32,11 @@ public class RegistrationCommand implements ServletCommand {
         loginPage = PageMappingProperties.LOGIN_PAGE;
     }
 
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[] ...params) {
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[]... params) {
         LOGGER.info("Executing command");
 
         if ((userService.findUserByEmail(request.getParameter("email")) == null)) {
-            LOGGER.info("Registering a new user");
+            LOGGER.info("Registering new user");
 
             User user = new UserBuilder().setEmail(request.getParameter("email"))
                     .setPassword(request.getParameter("password"))
