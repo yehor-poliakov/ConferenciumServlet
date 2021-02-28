@@ -7,6 +7,7 @@ import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.model.user.User;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserServiceImpl implements UserService {
 
@@ -74,5 +75,10 @@ public class UserServiceImpl implements UserService {
         }
         boolean isParticipant = userDao.isParticipant(userId, conferenceId);
         return isParticipant;
+    }
+
+    @Override
+    public Map<Long, String> findAllSpeakersIdAndNames() {
+        return userDao.findAllSpeakersIdAndNames();
     }
 }

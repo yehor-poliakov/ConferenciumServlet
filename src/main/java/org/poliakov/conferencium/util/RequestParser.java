@@ -1,9 +1,13 @@
 package org.poliakov.conferencium.util;
 
 import org.poliakov.conferencium.model.conference.*;
+import org.poliakov.conferencium.model.presentation.Presentation;
+import org.poliakov.conferencium.model.presentation.PresentationBuilder;
+import org.poliakov.conferencium.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class RequestParser {
     public ConferenceSearchFilters parseFilters(HttpServletRequest request) {
@@ -59,6 +63,33 @@ public class RequestParser {
         if (dateStr != null) {
             builder.setDate(LocalDate.parse(dateStr));
         }
+
+        return builder.build();
+    }
+
+    public Presentation parsePresentation(HttpServletRequest request) {
+        PresentationBuilder builder = new PresentationBuilder();
+        String topic = request.getParameter("topic");
+        builder.setTopic(topic);
+
+        String timeStr = request.getParameter("time");
+        if (timeStr != null) {
+            builder.setTime(LocalTime.parse(timeStr));
+        }
+
+        String conferenceIdStr = request.getParameter("conferenceid");
+        builder.setConferenceId(Long.parseLong(conferenceIdStr));
+
+        String presentationApprovedStr = request.getParameter("presentationApproved");
+        builder.setPresentationApproved(Boolean.parseBoolean(presentationApprovedStr));
+
+        String speakerApprovedStr = request.getParameter("presentationApproved");
+        builder.setSpeakerApproved(Boolean.parseBoolean(speakerApprovedStr));
+
+        builder.setSpeaker(request.getParameter("speaker"));
+
+        String speakerIdStr = request.getParameter("speakerid");
+        builder.setSpeakerId(Long.parseLong(speakerIdStr));
 
         return builder.build();
     }

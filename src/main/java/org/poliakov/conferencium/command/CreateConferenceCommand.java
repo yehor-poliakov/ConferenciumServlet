@@ -33,7 +33,8 @@ public class CreateConferenceCommand extends ModeratorServletCommand {
     }
 
     @Override
-    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response,
+                                      String[] params) {
         Conference conference = requestParser.parseConference(request);
 
         boolean error = false;

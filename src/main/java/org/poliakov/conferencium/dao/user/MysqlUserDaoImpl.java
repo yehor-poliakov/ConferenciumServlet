@@ -2,13 +2,18 @@ package org.poliakov.conferencium.dao.user;
 
 import org.apache.log4j.Logger;
 import org.poliakov.conferencium.connection.ConnectionPool;
+import org.poliakov.conferencium.model.presentation.PresentationDetails;
+import org.poliakov.conferencium.model.presentation.PresentationDetailsBuilder;
 import org.poliakov.conferencium.model.user.User;
 import org.poliakov.conferencium.model.user.UserBuilder;
 import org.poliakov.conferencium.model.user.UserRole;
 import org.poliakov.conferencium.properties.MysqlQueryProperties;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MysqlUserDaoImpl implements UserDao {
     private static final Logger LOGGER = Logger.getLogger(MysqlUserDaoImpl.class);
@@ -21,6 +26,7 @@ public class MysqlUserDaoImpl implements UserDao {
     private final String findByEmailQuery;
     private final String findByEmailAndPasswordQuery;
     private final String isParticipantQuery;
+    private final String findAllUsersSpeakersQuery;
 
     public MysqlUserDaoImpl() {
         LOGGER.info("Starting MysqlUserDaoImpl");
@@ -33,6 +39,7 @@ public class MysqlUserDaoImpl implements UserDao {
         findByEmailQuery = properties.getProperty("findUserByEmail");
         findByEmailAndPasswordQuery = properties.getProperty("findUserByEmailAndPassword");
         isParticipantQuery = properties.getProperty("isParticipant");
+        findAllUsersSpeakersQuery = properties.getProperty("findAllUsersSpeakers");
     }
 
     public static MysqlUserDaoImpl getInstance() {
@@ -153,6 +160,23 @@ public class MysqlUserDaoImpl implements UserDao {
         }
 
         return false;
+    }
+
+    public Map<Long, String> findAllSpeakersIdAndNames(ResultSet resultSet){
+        Map<Long, String> res = new HashMap<>();
+        try (Connection connection = connectionPool.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(findAllUsersSpeakersQuery);
+            ResultSet result = statement.executeQuery();
+            while (resultSet.next()) {
+                Long userId = resultSet.getLong("user_id");
+                String userName = resultSet.getString("user_name");
+                res.put(userId, userName);
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+
+        return res;
     }
 
     private User getUser(ResultSet resultSet) {

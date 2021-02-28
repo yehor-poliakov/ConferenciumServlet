@@ -26,7 +26,7 @@ public class LocalDateTag extends SimpleTagSupport {
 
         String languageTag = locale.equals("ua") ? "uk" : locale;
         Locale loc = Locale.forLanguageTag(languageTag);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-dd-yyyy", loc);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", loc);
         String formattedDate = date.format(formatter);
 
         out.println(formattedDate);

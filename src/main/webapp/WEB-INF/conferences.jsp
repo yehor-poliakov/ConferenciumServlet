@@ -53,7 +53,7 @@
                                                 <label class="filter-col align-text-bottom mb-0 mr-0" for="orderby">
                                                     <fmt:message key="orderByOption" bundle="${bundle}"/>
                                                 </label>
-                                                <select name="orderby" name="orderby" id="orderby"
+                                                <select name="orderby" id="orderby"
                                                         class="form-control custom-select custom-select-sm ml-2 mb-0 align-center"
                                                         onChange="this.form.submit()">
                                                     <c:forEach items="${orderbyOptions}" var="orderbyOption">
