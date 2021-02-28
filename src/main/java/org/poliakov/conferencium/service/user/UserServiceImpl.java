@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByCredentials(String email, String password) {
         LOGGER.info("Getting user by credentials");
 
-        if(email == null || password == null) {
+        if (email == null || password == null) {
             return null;
         }
 
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
         LOGGER.info("Finding user by email " + email);
 
-        if(email == null) {
+        if (email == null) {
             return null;
         }
 
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     public User findUserById(Long id) {
         LOGGER.info("Finding user by id " + id);
 
-        if(id == null) {
+        if (id == null) {
             return null;
         }
 
@@ -78,7 +78,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean registerUserForConference(String email, Long conferenceId) {
+        if (email == null) {
+            return false;
+        }
+        boolean registered = userDao.registerUserForConference(email, conferenceId);
+        return registered;
+    }
+
+    @Override
     public Map<Long, String> findAllSpeakersIdAndNames() {
         return userDao.findAllSpeakersIdAndNames();
     }
+
+    @Override
+    public boolean unregisterUserFromConference(String email, Long conferenceId) {
+        if (email == null) {
+            return false;
+        }
+        boolean unregistered = userDao.unregisterUserFromConference(email, conferenceId);
+        return unregistered;
+    }
+
+
 }

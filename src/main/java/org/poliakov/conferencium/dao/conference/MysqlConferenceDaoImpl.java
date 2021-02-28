@@ -191,7 +191,6 @@ public class MysqlConferenceDaoImpl implements ConferenceDao {
         return 0;
     }
 
-
     private Conference getConference(ResultSet resultSet) {
         List<Conference> conferences = getConferences(resultSet);
         if (conferences.size() == 1) {

@@ -11,8 +11,8 @@ import org.poliakov.conferencium.util.RequestParser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class CreateConferenceCommand extends ModeratorServletCommand {
-    private static final Logger LOGGER = Logger.getLogger(CreateConferenceCommand.class);
+public class EditConferenceCommand extends ModeratorServletCommand {
+    private static final Logger LOGGER = Logger.getLogger(EditConferenceCommand.class);
 
     private final RequestParser requestParser;
     private final ConferenceService conferenceService;
@@ -21,7 +21,7 @@ public class CreateConferenceCommand extends ModeratorServletCommand {
     private final String page;
     private final String conferencesPageRedirect;
 
-    public CreateConferenceCommand() {
+    public EditConferenceCommand() {
         LOGGER.info("Starting GetCreateConferencePageCommand");
 
         requestParser = new RequestParser();

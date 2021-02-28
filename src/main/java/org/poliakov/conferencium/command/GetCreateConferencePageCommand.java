@@ -19,7 +19,8 @@ public class GetCreateConferencePageCommand extends ModeratorServletCommand {
     }
 
     @Override
-    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response,
+                                      String[] params) {
         Conference conference = new Conference();
         request.setAttribute("conference", conference);
         return page;

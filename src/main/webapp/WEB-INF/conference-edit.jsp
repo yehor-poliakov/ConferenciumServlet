@@ -13,7 +13,7 @@
     </jsp:attribute>
     <jsp:body>
         <div class="row">
-            <form action="conference/create" method="post">
+            <form action="conference/${conferenceId}/edit" method="post">
                 <div class="form-group">
                     <label for="title"><fmt:message key="TitleInscription" bundle="${bundle}"/></label>
                     <fmt:message key="TitleInscription" var="titleInscription" />
@@ -29,7 +29,7 @@
                     <fmt:message key="DateInscription" var="dateInscription" />
                     <input class="form-control" type="date" id="date" name="date" placeholder="${dateInscription}" value="${conference.date}">
                 </div>
-                <button type="submit" class="btn btn-primary"><fmt:message key="addConferenceButton" bundle="${bundle}"/></button>
+                <button type="submit" class="btn btn-primary"><fmt:message key="editButton" bundle="${bundle}"/></button>
             </form>
         </div>
     </jsp:body>

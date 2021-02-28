@@ -22,7 +22,7 @@
                 </p>
 
                 <c:if test="${sessionScope.role == 'MODERATOR'}">
-                    <a href="conference/${conference.id}" class="btn btn-primary">
+                    <a href="${conference.id}/edit" class="btn btn-primary">
                         <fmt:message key="editButton" bundle="${bundle}"/>
                     </a>
                 </c:if>
@@ -114,7 +114,7 @@
                     <button class="btn btn-success" type="submit"><fmt:message key="newPresentationLink"
                                                                                bundle="${bundle}"/></button>
                 </form>
-                <form action="conference/${conference.id}/delete" method="post">
+                <form action="${conference.id}/delete" method="post">
                     <button class="btn btn-danger mt-1" type="submit">
                         <fmt:message key="deleteConferenceButton" bundle="${bundle}"/>
                     </button>

@@ -31,11 +31,22 @@ public class CommandManager {
         getCommands.put("/conferences", new GetConferencesPageCommand());
         getCommands.put("/conference/create", new GetCreateConferencePageCommand());
         getCommands.put("/conference/(\\d+)", new GetConferencePageCommand());
+        getCommands.put("/conference/(\\d+)/edit", new GetEditConferencePageCommand());
+        getCommands.put("/conference/(\\d+)/delete", new GetDeleteConferencePageCommand());
+        getCommands.put("/presentation/create/conference/(\\d+)", new GetCreatePresentationPageCommand());
+        getCommands.put("/presentation/(\\d+)/edit/conference/(\\d+)", new GetEditPresentationPageCommand());
         getCommands.put("/cabinet", new GetCabinetPageCommand());
 
         postCommands.put("/login", new LoginCommand());
         postCommands.put("/logout", new LogoutCommand());
+        postCommands.put("/conference/create", new CreateConferenceCommand());
+        postCommands.put("/conference/(\\d+)/edit", new EditConferenceCommand());
+        postCommands.put("/conference/(\\d+)/delete", new CreateConferenceCommand());
+        postCommands.put("/presentation/create/conference/(\\d+)", new CreatePresentationCommand());
+        postCommands.put("/presentation/(\\d+)/edit/conference/(\\d+)", new EditPresentationCommand());
         postCommands.put("/registration", new RegistrationCommand());
+        postCommands.put("/conference/(\\d+)/signup", new ConferenceRegistrationCommand());
+        postCommands.put("/conference/(\\d+)/signout", new ConferenceUnregistrationCommand());
     }
 
     /**
@@ -102,3 +113,5 @@ public class CommandManager {
         return mapping;
     }
 }
+
+

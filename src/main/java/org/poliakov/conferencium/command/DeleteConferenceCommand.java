@@ -11,17 +11,16 @@ import org.poliakov.conferencium.util.RequestParser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class CreateConferenceCommand extends ModeratorServletCommand {
-    private static final Logger LOGGER = Logger.getLogger(CreateConferenceCommand.class);
+public class DeleteConferenceCommand extends ModeratorServletCommand {
+    private static final Logger LOGGER = Logger.getLogger(DeleteConferenceCommand.class);
 
     private final RequestParser requestParser;
     private final ConferenceService conferenceService;
 
-
     private final String page;
     private final String conferencesPageRedirect;
 
-    public CreateConferenceCommand() {
+    public DeleteConferenceCommand() {
         LOGGER.info("Starting GetCreateConferencePageCommand");
 
         requestParser = new RequestParser();
@@ -34,31 +33,8 @@ public class CreateConferenceCommand extends ModeratorServletCommand {
     @Override
     protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response,
                                       String[] params) {
-        Conference conference = requestParser.parseConference(request);
-
-        boolean error = false;
-
-        if (conference.getTitle() == null || conference.getTitle().equals("")) {
-            request.setAttribute("titleError", true);
-            error = true;
-        }
-
-        if (conference.getLocation() == null || conference.getLocation().equals("")) {
-            request.setAttribute("locationError", true);
-            error = true;
-        }
-
-        if (conference.getDate() == null) {
-            request.setAttribute("dateError", true);
-            error = true;
-        }
-
-        if (error) {
-            request.setAttribute("conference", conference);
-            return page;
-        }
-
-        conferenceService.createConference(conference);
+        Long conferenceId = Long.parseLong(params[0]);
+        conferenceService.deleteConference(conferenceId);
         return conferencesPageRedirect;
     }
 }

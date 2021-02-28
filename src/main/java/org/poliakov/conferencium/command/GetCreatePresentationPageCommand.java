@@ -27,7 +27,7 @@ public class GetCreatePresentationPageCommand extends ModeratorServletCommand {
 
     @Override
     protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
-        Long conferenceId = Long.parseLong(params[1]);
+        Long conferenceId = Long.parseLong(params[3]);
         Presentation presentation = new PresentationBuilder().setConferenceId(conferenceId).build();
         request.setAttribute("presentation", presentation);
         Map<Long, String> speakers = userService.findAllSpeakersIdAndNames();

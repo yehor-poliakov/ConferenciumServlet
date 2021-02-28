@@ -26,6 +26,8 @@ public class MysqlUserDaoImpl implements UserDao {
     private final String findByEmailQuery;
     private final String findByEmailAndPasswordQuery;
     private final String isParticipantQuery;
+    private final String registerForConferenceQuery;
+    private final String unregisterFromConferenceQuery;
     private final String findAllUsersSpeakersQuery;
 
     public MysqlUserDaoImpl() {
@@ -39,6 +41,8 @@ public class MysqlUserDaoImpl implements UserDao {
         findByEmailQuery = properties.getProperty("findUserByEmail");
         findByEmailAndPasswordQuery = properties.getProperty("findUserByEmailAndPassword");
         isParticipantQuery = properties.getProperty("isParticipant");
+        registerForConferenceQuery = properties.getProperty("registerForConference");
+        unregisterFromConferenceQuery = properties.getProperty("unregisterFromConference");
         findAllUsersSpeakersQuery = properties.getProperty("findAllUsersSpeakers");
     }
 
@@ -162,14 +166,33 @@ public class MysqlUserDaoImpl implements UserDao {
         return false;
     }
 
-    public Map<Long, String> findAllSpeakersIdAndNames(ResultSet resultSet){
+    @Override
+    public boolean registerUserForConference(String email, Long conferenceId) {
+        try(Connection connection = connectionPool.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(registerForConferenceQuery);
+            statement.setLong(1, conferenceId);
+            statement.setString(2, email);
+
+            ResultSet result = statement.executeQuery();
+
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+            return false;
+        }
+            return true;
+    }
+
+    @Override
+    public Map<Long, String> findAllSpeakersIdAndNames(){
+        LOGGER.info("Getting all speakers");
+
         Map<Long, String> res = new HashMap<>();
         try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(findAllUsersSpeakersQuery);
             ResultSet result = statement.executeQuery();
-            while (resultSet.next()) {
-                Long userId = resultSet.getLong("user_id");
-                String userName = resultSet.getString("user_name");
+            while (result.next()) {
+                Long userId = result.getLong("user_id");
+                String userName = result.getString("user_name");
                 res.put(userId, userName);
             }
         } catch (SQLException e) {
@@ -177,6 +200,22 @@ public class MysqlUserDaoImpl implements UserDao {
         }
 
         return res;
+    }
+
+    @Override
+    public boolean unregisterUserFromConference(String email, Long conferenceId) {
+        try(Connection connection = connectionPool.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(unregisterFromConferenceQuery);
+            statement.setLong(1, conferenceId);
+            statement.setString(2, email);
+
+            ResultSet result = statement.executeQuery();
+
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     private User getUser(ResultSet resultSet) {
