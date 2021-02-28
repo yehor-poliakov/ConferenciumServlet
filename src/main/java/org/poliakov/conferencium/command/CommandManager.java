@@ -34,6 +34,7 @@ public class CommandManager {
         getCommands.put("/conference/(\\d+)/edit", new GetEditConferencePageCommand());
         getCommands.put("/conference/(\\d+)/delete", new GetDeleteConferencePageCommand());
         getCommands.put("/presentation/create/conference/(\\d+)", new GetCreatePresentationPageCommand());
+        getCommands.put("/presentation/suggest/conference/(\\d+)", new GetSuggestPresentationPageCommand());
         getCommands.put("/presentation/(\\d+)/edit/conference/(\\d+)", new GetEditPresentationPageCommand());
         getCommands.put("/cabinet", new GetCabinetPageCommand());
 
@@ -41,9 +42,10 @@ public class CommandManager {
         postCommands.put("/logout", new LogoutCommand());
         postCommands.put("/conference/create", new CreateConferenceCommand());
         postCommands.put("/conference/(\\d+)/edit", new EditConferenceCommand());
-        postCommands.put("/conference/(\\d+)/delete", new CreateConferenceCommand());
+        postCommands.put("/conference/(\\d+)/delete", new DeleteConferenceCommand());
         postCommands.put("/presentation/create/conference/(\\d+)", new CreatePresentationCommand());
         postCommands.put("/presentation/(\\d+)/edit/conference/(\\d+)", new EditPresentationCommand());
+        postCommands.put("/presentation/suggest/conference/(\\d+)", new SuggestPresentationCommand());
         postCommands.put("/registration", new RegistrationCommand());
         postCommands.put("/conference/(\\d+)/signup", new ConferenceRegistrationCommand());
         postCommands.put("/conference/(\\d+)/signout", new ConferenceUnregistrationCommand());
@@ -69,7 +71,8 @@ public class CommandManager {
         return getCommandInfo(request, postCommands);
     }
 
-    private Optional<ServletCommandInfo> getCommandInfo(HttpServletRequest request, HashMap<String, ServletCommand> commands) {
+    private Optional<ServletCommandInfo> getCommandInfo(HttpServletRequest request, HashMap<String,
+                                                        ServletCommand> commands) {
         String command = getMapping(request);
 
         LOGGER.info("Instantiating command " + command);
@@ -85,7 +88,6 @@ public class CommandManager {
                 return Optional.of(result);
             }
         }
-
         return Optional.empty();
     }
 

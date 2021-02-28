@@ -48,6 +48,7 @@ public class Servlet extends HttpServlet {
 
         if (page.startsWith("redirect:")) {
             page = page.substring("redirect:".length());
+            System.out.println(page);
             response.sendRedirect(page);
         } else {
             request.getRequestDispatcher(page).forward(request, response);

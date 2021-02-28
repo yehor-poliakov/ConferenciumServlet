@@ -121,7 +121,7 @@
                 </form>
             </c:if>
             <c:if test="${sessionScope.role == 'SPEAKER'}">
-                <form action="presentation/suggest/${conference.id}">
+                <form action="/presentation/suggest/conference/${conference.id}">
                     <button class="btn btn-success mt-1" type="submit">
                         <fmt:message key="suggestPresentationButton" bundle="${bundle}"/>
                     </button>

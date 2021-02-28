@@ -20,6 +20,11 @@
                 <input class="form-control" placeholder="<fmt:message key="password" bundle="${bundle}"/>" name="password" type="password" required>
                 <input class="form-control" placeholder="<fmt:message key="firstNamePlaceholder" bundle="${bundle}"/>" name="firstname" type="firstname" required>
                 <input class="form-control" placeholder="<fmt:message key="lastNamePlaceholder" bundle="${bundle}"/>" name="lastname" type="lastname" required>
+                <input class="form-check-input align-text-bottom mt-9" type="checkbox"
+                       name="isSpeaker" id="isSpeaker" onChange="checked"/>
+                <label class="form-check-label align-text-bottom mt-9" for="isSpeaker">
+                    <fmt:message key="speakerCheckbox" bundle="${bundle}"/>
+                </label>
                 <button class="btn btn-lg btn-primary btn-block" type="submit"><fmt:message key="registerButton" bundle="${bundle}"/></button>
             </form>
         </div>

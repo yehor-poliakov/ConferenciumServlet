@@ -44,7 +44,7 @@ public class RegistrationCommand implements ServletCommand {
                     .setPassword(request.getParameter("password"))
                     .setFirstName(request.getParameter("firstname"))
                     .setLastName(request.getParameter("lastname"))
-                    .setRole(UserRole.PARTICIPANT)
+                    .setRole(stringToRole((request.getParameter("isSpeaker"))))
                     .build();
             userService.registerUser(user);
             resultPage = loginPage;
@@ -53,5 +53,9 @@ public class RegistrationCommand implements ServletCommand {
         }
 
         return resultPage;
+    }
+
+    private UserRole stringToRole (String role){
+        return (role.equals("on") ? UserRole.SPEAKER : UserRole.PARTICIPANT);
     }
 }

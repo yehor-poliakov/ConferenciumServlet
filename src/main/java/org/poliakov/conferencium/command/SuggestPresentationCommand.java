@@ -1,22 +1,18 @@
 package org.poliakov.conferencium.command;
 
 import org.apache.log4j.Logger;
-import org.poliakov.conferencium.dao.conference.MysqlConferenceDaoImpl;
 import org.poliakov.conferencium.dao.presentation.MysqlPresentationDaoImpl;
-import org.poliakov.conferencium.model.conference.Conference;
 import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.properties.PageMappingProperties;
-import org.poliakov.conferencium.service.conference.ConferenceServiceImpl;
 import org.poliakov.conferencium.service.presentation.PresentationService;
 import org.poliakov.conferencium.service.presentation.PresentationServiceImpl;
 import org.poliakov.conferencium.util.RequestParser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalTime;
 
-public class CreatePresentationCommand extends ModeratorServletCommand {
-    private static final Logger LOGGER = Logger.getLogger(CreatePresentationCommand.class);
+public class SuggestPresentationCommand implements ServletCommand {
+    private static final Logger LOGGER = Logger.getLogger(SuggestPresentationCommand.class);
 
     private final RequestParser requestParser;
     private final PresentationService presentationService;
@@ -25,7 +21,7 @@ public class CreatePresentationCommand extends ModeratorServletCommand {
     private final String page;
     private final String conferencesPageRedirect;
 
-    public CreatePresentationCommand() {
+    public SuggestPresentationCommand() {
         LOGGER.info("Starting CreatePresentationCommand");
 
         requestParser = new RequestParser();
@@ -36,8 +32,10 @@ public class CreatePresentationCommand extends ModeratorServletCommand {
     }
 
     @Override
-    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         Presentation presentation = requestParser.parsePresentation(request);
+        presentation.setPresentationApproved(false);
+        presentation.setSpeakerApproved(false);
 
         boolean error = false;
 
@@ -64,4 +62,5 @@ public class CreatePresentationCommand extends ModeratorServletCommand {
         presentationService.createPresentation(presentation);
         return conferencesPageRedirect;
     }
+
 }
