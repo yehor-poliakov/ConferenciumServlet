@@ -1,6 +1,8 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.presentation;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ServletCommand;
+import org.poliakov.conferencium.command.SpeakerServletCommand;
 import org.poliakov.conferencium.dao.presentation.MysqlPresentationDaoImpl;
 import org.poliakov.conferencium.dao.user.MysqlUserDaoImpl;
 import org.poliakov.conferencium.model.presentation.PresentationDetails;
@@ -14,11 +16,10 @@ import org.poliakov.conferencium.util.Page;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GetCabinetPageCommand implements ServletCommand {
+public class GetCabinetPageCommand extends SpeakerServletCommand {
     private static final Logger LOGGER = Logger.getLogger(GetCabinetPageCommand.class);
 
     private final PresentationService presentationService;
-    private final UserService userService;
 
     private final String cabinetPage;
 
@@ -27,11 +28,10 @@ public class GetCabinetPageCommand implements ServletCommand {
 
         presentationService = new PresentationServiceImpl(MysqlPresentationDaoImpl.getInstance());
         cabinetPage = PageMappingProperties.CABINET_PAGE;
-        userService = new UserServiceImpl(new MysqlUserDaoImpl());
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+    public String restrictedExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         Long speakerId = (Long) request.getSession().getAttribute("id");
 
         String pageNumberStr = request.getParameter("pageNumber");

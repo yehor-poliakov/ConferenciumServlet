@@ -1,12 +1,13 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.conference;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ParticipantServletCommand;
+import org.poliakov.conferencium.command.ServletCommand;
+import org.poliakov.conferencium.command.UserServletCommand;
 import org.poliakov.conferencium.dao.conference.MysqlConferenceDaoImpl;
 import org.poliakov.conferencium.dao.presentation.MysqlPresentationDaoImpl;
 import org.poliakov.conferencium.dao.user.MysqlUserDaoImpl;
 import org.poliakov.conferencium.model.conference.Conference;
-import org.poliakov.conferencium.model.conference.ConferenceSearchFilters;
-import org.poliakov.conferencium.model.conference.ConferenceSortType;
 import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.properties.PageMappingProperties;
 import org.poliakov.conferencium.service.conference.ConferenceService;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class GetConferencePageCommand implements ServletCommand {
+public class GetConferencePageCommand extends UserServletCommand {
     private static final Logger LOGGER = Logger.getLogger(GetConferencePageCommand.class);
 
     private final ConferenceService conferenceService;
@@ -39,7 +40,7 @@ public class GetConferencePageCommand implements ServletCommand {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+    public String restrictedExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         Long conferenceId = Long.parseLong(params[0]);
         Long participantId = (Long) request.getSession().getAttribute("id");
 

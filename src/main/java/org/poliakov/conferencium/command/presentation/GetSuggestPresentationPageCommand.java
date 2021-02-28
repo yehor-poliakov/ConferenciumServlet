@@ -1,6 +1,9 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.presentation;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ModeratorServletCommand;
+import org.poliakov.conferencium.command.ServletCommand;
+import org.poliakov.conferencium.command.SpeakerServletCommand;
 import org.poliakov.conferencium.dao.user.MysqlUserDaoImpl;
 import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.model.presentation.PresentationBuilder;
@@ -13,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 
-public class GetSuggestPresentationPageCommand implements ServletCommand {
+public class GetSuggestPresentationPageCommand extends SpeakerServletCommand {
     private static final Logger LOGGER = Logger.getLogger(GetSuggestPresentationPageCommand.class);
 
     private final String page;
@@ -22,12 +25,12 @@ public class GetSuggestPresentationPageCommand implements ServletCommand {
     public GetSuggestPresentationPageCommand() {
         LOGGER.info("Starting GetCreateConferencePageCommand");
         userService = new UserServiceImpl(MysqlUserDaoImpl.getInstance());
-        page = PageMappingProperties.CREATE_PRESENTATION_PAGE;
+        page = PageMappingProperties.SUGGEST_PRESENTATION_PAGE;
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
-        Long conferenceId = Long.parseLong(params[3]);
+    protected String restrictedExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+        Long conferenceId = Long.parseLong(params[0]);
         Presentation presentation = new PresentationBuilder().setConferenceId(conferenceId).build();
         request.setAttribute("presentation", presentation);
         Map<Long, String> speakers = userService.findAllSpeakersIdAndNames();

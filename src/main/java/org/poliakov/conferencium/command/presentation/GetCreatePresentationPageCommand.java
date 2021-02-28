@@ -1,6 +1,7 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.presentation;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ModeratorServletCommand;
 import org.poliakov.conferencium.dao.user.MysqlUserDaoImpl;
 import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.model.presentation.PresentationBuilder;
@@ -26,8 +27,8 @@ public class GetCreatePresentationPageCommand extends ModeratorServletCommand {
     }
 
     @Override
-    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
-        Long conferenceId = Long.parseLong(params[3]);
+    protected String restrictedExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+        Long conferenceId = Long.parseLong(params[0]);
         Presentation presentation = new PresentationBuilder().setConferenceId(conferenceId).build();
         request.setAttribute("presentation", presentation);
         Map<Long, String> speakers = userService.findAllSpeakersIdAndNames();

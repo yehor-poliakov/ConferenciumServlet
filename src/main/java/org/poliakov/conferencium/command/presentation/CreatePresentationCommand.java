@@ -1,6 +1,7 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.presentation;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ModeratorServletCommand;
 import org.poliakov.conferencium.dao.presentation.MysqlPresentationDaoImpl;
 import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.properties.PageMappingProperties;
@@ -11,41 +12,37 @@ import org.poliakov.conferencium.util.RequestParser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SuggestPresentationCommand implements ServletCommand {
-    private static final Logger LOGGER = Logger.getLogger(SuggestPresentationCommand.class);
+public class CreatePresentationCommand extends ModeratorServletCommand {
+    private static final Logger LOGGER = Logger.getLogger(CreatePresentationCommand.class);
 
     private final RequestParser requestParser;
     private final PresentationService presentationService;
 
 
     private final String page;
-    private final String conferencesPageRedirect;
+    private final String conferencePageRedirect;
 
-    public SuggestPresentationCommand() {
+    public CreatePresentationCommand() {
         LOGGER.info("Starting CreatePresentationCommand");
 
         requestParser = new RequestParser();
         presentationService = new PresentationServiceImpl(MysqlPresentationDaoImpl.getInstance());
 
         page = PageMappingProperties.CREATE_PRESENTATION_PAGE;
-        conferencesPageRedirect = PageMappingProperties.MAIN_PAGE_REDIRECT;
+        conferencePageRedirect = PageMappingProperties.CONFERENCE_REDIRECT;
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+    protected String restrictedExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         Presentation presentation = requestParser.parsePresentation(request);
-        presentation.setPresentationApproved(false);
-        presentation.setSpeakerApproved(false);
+
+        Long conferenceId = Long.parseLong(params[0]);
+        presentation.setConferenceId(conferenceId);
 
         boolean error = false;
 
         if (presentation.getTopic() == null || presentation.getTopic().equals("")) {
             request.setAttribute("topicError", true);
-            error = true;
-        }
-
-        if (presentation.getSpeaker().equals("")) {
-            request.setAttribute("speakerError", true);
             error = true;
         }
 
@@ -60,7 +57,6 @@ public class SuggestPresentationCommand implements ServletCommand {
         }
 
         presentationService.createPresentation(presentation);
-        return conferencesPageRedirect;
+        return conferencePageRedirect + conferenceId;
     }
-
 }

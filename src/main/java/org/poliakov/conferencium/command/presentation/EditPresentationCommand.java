@@ -1,53 +1,48 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.presentation;
 
 import org.apache.log4j.Logger;
-import org.poliakov.conferencium.dao.conference.MysqlConferenceDaoImpl;
+import org.poliakov.conferencium.command.ModeratorServletCommand;
 import org.poliakov.conferencium.dao.presentation.MysqlPresentationDaoImpl;
-import org.poliakov.conferencium.model.conference.Conference;
 import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.properties.PageMappingProperties;
-import org.poliakov.conferencium.service.conference.ConferenceServiceImpl;
 import org.poliakov.conferencium.service.presentation.PresentationService;
 import org.poliakov.conferencium.service.presentation.PresentationServiceImpl;
 import org.poliakov.conferencium.util.RequestParser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalTime;
 
-public class CreatePresentationCommand extends ModeratorServletCommand {
-    private static final Logger LOGGER = Logger.getLogger(CreatePresentationCommand.class);
+public class EditPresentationCommand extends ModeratorServletCommand {
+    private static final Logger LOGGER = Logger.getLogger(EditPresentationCommand.class);
 
     private final RequestParser requestParser;
     private final PresentationService presentationService;
 
 
     private final String page;
-    private final String conferencesPageRedirect;
+    private final String conferencePageRedirect;
 
-    public CreatePresentationCommand() {
-        LOGGER.info("Starting CreatePresentationCommand");
+    public EditPresentationCommand() {
+        LOGGER.info("Starting GetCreateConferencePageCommand");
 
         requestParser = new RequestParser();
         presentationService = new PresentationServiceImpl(MysqlPresentationDaoImpl.getInstance());
 
         page = PageMappingProperties.CREATE_PRESENTATION_PAGE;
-        conferencesPageRedirect = PageMappingProperties.MAIN_PAGE_REDIRECT;
+        conferencePageRedirect = PageMappingProperties.CONFERENCE_REDIRECT;
     }
 
     @Override
-    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
+    protected String restrictedExecute(HttpServletRequest request, HttpServletResponse response, String[] params) {
         Presentation presentation = requestParser.parsePresentation(request);
+
+        Long presentationId = Long.parseLong(params[0]);
+        presentation.setId(presentationId);
 
         boolean error = false;
 
         if (presentation.getTopic() == null || presentation.getTopic().equals("")) {
             request.setAttribute("topicError", true);
-            error = true;
-        }
-
-        if (presentation.getSpeaker().equals("")) {
-            request.setAttribute("speakerError", true);
             error = true;
         }
 
@@ -61,7 +56,7 @@ public class CreatePresentationCommand extends ModeratorServletCommand {
             return page;
         }
 
-        presentationService.createPresentation(presentation);
-        return conferencesPageRedirect;
+        presentationService.updatePresentation(presentation);
+        return conferencePageRedirect + presentation.getConferenceId();
     }
 }

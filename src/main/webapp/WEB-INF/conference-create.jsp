@@ -17,17 +17,17 @@
                 <div class="form-group">
                     <label for="title"><fmt:message key="TitleInscription" bundle="${bundle}"/></label>
                     <fmt:message key="TitleInscription" var="titleInscription" />
-                    <input class="form-control" type="text" id="title" name="title" placeholder="${titleInscription}" value="${conference.title}">
+                    <input class="form-control" type="text" id="title" name="title" placeholder="${titleInscription}" value="${conference.title}" required>
                 </div>
                 <div class="form-group">
                     <label for="location"><fmt:message key="LocationInscription" bundle="${bundle}"/></label>
                     <fmt:message key="LocationInscription" var="locationInscription" />
-                    <input class="form-control" type="text" id="location" name="location" placeholder="${locationInscription}" value="${conference.location}">
+                    <input class="form-control" type="text" id="location" name="location" placeholder="${locationInscription}" value="${conference.location}" required>
                 </div>
                 <div class="form-group">
                     <label for="date"><fmt:message key="DateInscription" bundle="${bundle}"/></label>
                     <fmt:message key="DateInscription" var="dateInscription" />
-                    <input class="form-control" type="date" id="date" name="date" placeholder="${dateInscription}" value="${conference.date}">
+                    <input class="form-control" type="date" id="date" name="date" placeholder="${dateInscription}" value="${conference.date}" required>
                 </div>
                 <button type="submit" class="btn btn-primary"><fmt:message key="addConferenceButton" bundle="${bundle}"/></button>
             </form>

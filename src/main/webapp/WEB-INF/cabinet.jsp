@@ -53,12 +53,10 @@
                         </td>
                         <td>${presentation.presentationTime}</td>
                         <td>
-                            <input type="checkbox" disabled
-                                   checked="${presentation.speakerApproved}"/>
+                            <input type="checkbox" disabled ${presentation.speakerApproved ? 'checked' : ''}/>
                         </td>
                         <td>
-                            <input type="checkbox" disabled
-                                   checked="${presentation.presentationApproved}"/>
+                            <input type="checkbox" disabled ${presentation.presentationApproved ? 'checked' : ''}/>
                         </td>
                     </tr>
                 </c:forEach>

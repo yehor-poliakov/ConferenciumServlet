@@ -1,6 +1,7 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.conference;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ServletCommand;
 import org.poliakov.conferencium.dao.conference.MysqlConferenceDaoImpl;
 import org.poliakov.conferencium.model.conference.Conference;
 import org.poliakov.conferencium.model.conference.ConferenceSearchFilters;

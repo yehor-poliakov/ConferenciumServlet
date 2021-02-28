@@ -1,6 +1,7 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.login;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ServletCommand;
 import org.poliakov.conferencium.properties.PageMappingProperties;
 
 import javax.servlet.http.HttpServletRequest;

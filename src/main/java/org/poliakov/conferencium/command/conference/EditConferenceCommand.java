@@ -1,6 +1,7 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.conference;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ModeratorServletCommand;
 import org.poliakov.conferencium.dao.conference.MysqlConferenceDaoImpl;
 import org.poliakov.conferencium.model.conference.Conference;
 import org.poliakov.conferencium.properties.PageMappingProperties;
@@ -19,7 +20,7 @@ public class EditConferenceCommand extends ModeratorServletCommand {
 
 
     private final String page;
-    private final String conferencesPageRedirect;
+    private final String conferencePageRedirect;
 
     public EditConferenceCommand() {
         LOGGER.info("Starting GetCreateConferencePageCommand");
@@ -27,14 +28,17 @@ public class EditConferenceCommand extends ModeratorServletCommand {
         requestParser = new RequestParser();
         conferenceService = new ConferenceServiceImpl(MysqlConferenceDaoImpl.getInstance());
 
-        page = PageMappingProperties.CREATE_CONFERENCE_PAGE;
-        conferencesPageRedirect = PageMappingProperties.MAIN_PAGE_REDIRECT;
+        page = PageMappingProperties.EDIT_CONFERENCE_PAGE;
+        conferencePageRedirect = PageMappingProperties.CONFERENCE_REDIRECT;
     }
 
     @Override
-    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response,
-                                      String[] params) {
+    protected String restrictedExecute(HttpServletRequest request, HttpServletResponse response,
+                                       String[] params) {
         Conference conference = requestParser.parseConference(request);
+
+        Long conferenceId = Long.parseLong(params[0]);
+        conference.setId(conferenceId);
 
         boolean error = false;
 
@@ -58,7 +62,7 @@ public class EditConferenceCommand extends ModeratorServletCommand {
             return page;
         }
 
-        conferenceService.createConference(conference);
-        return conferencesPageRedirect;
+        conferenceService.updateConference(conference);
+        return conferencePageRedirect + conferenceId;
     }
 }

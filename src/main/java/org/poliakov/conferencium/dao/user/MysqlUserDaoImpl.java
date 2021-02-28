@@ -167,19 +167,20 @@ public class MysqlUserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean registerUserForConference(String email, Long conferenceId) {
-        try(Connection connection = connectionPool.getConnection()) {
+    public boolean registerUserForConference(Long userId, Long conferenceId) {
+        try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(registerForConferenceQuery);
             statement.setLong(1, conferenceId);
-            statement.setString(2, email);
+            statement.setLong(2, userId);
 
-            ResultSet result = statement.executeQuery();
+            statement.executeUpdate();
 
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
             return false;
         }
-            return true;
+
+        return true;
     }
 
     @Override
@@ -203,14 +204,13 @@ public class MysqlUserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean unregisterUserFromConference(String email, Long conferenceId) {
+    public boolean unregisterUserFromConference(Long userId, Long conferenceId) {
         try(Connection connection = connectionPool.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(unregisterFromConferenceQuery);
             statement.setLong(1, conferenceId);
-            statement.setString(2, email);
+            statement.setLong(2, userId);
 
-            ResultSet result = statement.executeQuery();
-
+            statement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
             return false;

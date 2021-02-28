@@ -4,15 +4,9 @@ import org.apache.log4j.Logger;
 import org.poliakov.conferencium.command.CommandManager;
 import org.poliakov.conferencium.command.ServletCommand;
 import org.poliakov.conferencium.command.ServletCommandInfo;
-import org.poliakov.conferencium.connection.ConnectionPool;
 import org.poliakov.conferencium.properties.PageMappingProperties;
-import org.poliakov.conferencium.util.Page;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Optional;
 import javax.servlet.ServletConfig;
@@ -37,7 +31,7 @@ public class Servlet extends HttpServlet {
         Optional<ServletCommandInfo> commandInfo = isGetCommand ? commandManager.getGetCommand(request) : commandManager.getPostCommand(request);
 
         if (!commandInfo.isPresent()) {
-            response.sendRedirect(PageMappingProperties.MAIN_PAGE_REDIRECT);
+            handleRedirect(response, PageMappingProperties.MAIN_PAGE_REDIRECT);
             return;
         }
 
@@ -47,12 +41,16 @@ public class Servlet extends HttpServlet {
         String page = command.execute(request, response, params);
 
         if (page.startsWith("redirect:")) {
-            page = page.substring("redirect:".length());
-            System.out.println(page);
-            response.sendRedirect(page);
+            handleRedirect(response, page);
         } else {
             request.getRequestDispatcher(page).forward(request, response);
         }
+    }
+
+    private void handleRedirect(HttpServletResponse response, String page) throws IOException {
+        String path = page.substring("redirect:".length());
+        String redirect = "/ConferenciumServletPoliakov/" + path;
+        response.sendRedirect(redirect);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

@@ -16,9 +16,9 @@ public interface UserDao {
 
     boolean isParticipant(Long userId, Long conferenceId);
 
-    boolean registerUserForConference(String email, Long conferenceId);
+    boolean registerUserForConference(Long userId, Long conferenceId);
 
     Map<Long, String> findAllSpeakersIdAndNames();
 
-    boolean unregisterUserFromConference(String email, Long conferenceId);
+    boolean unregisterUserFromConference(Long userId, Long conferenceId);
 }

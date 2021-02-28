@@ -22,12 +22,18 @@ public class PresentationServiceImpl implements PresentationService {
     @Override
     public Presentation createPresentation(Presentation presentation) {
         LOGGER.info("Creating new presentation");
+        if (presentation.getSpeakerId() == null) {
+            presentation.setSpeakerApproved(false);
+        }
         return presentationDao.createPresentation(presentation);
     }
 
     @Override
     public Presentation updatePresentation(Presentation presentation) {
         LOGGER.info("Updating presentation " + presentation.getId());
+        if (presentation.getSpeakerId() == null) {
+            presentation.setSpeakerApproved(false);
+        }
         return presentationDao.updatePresentation(presentation);
     }
 

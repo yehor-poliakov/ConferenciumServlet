@@ -29,13 +29,13 @@
 
                 <c:if test="${sessionScope.role == 'PARTICIPANT'}">
                     <c:if test="${!registered}">
-                        <form action="/conference/${conference.id}/signup" method="post">
+                        <form action="${conference.id}/signup" method="post">
                             <button class="btn btn-primary" type="submit"><fmt:message key="registerButton"
                                                                                        bundle="${bundle}"/></button>
                         </form>
                     </c:if>
                     <c:if test="${registered}">
-                        <form action="/conference/${conference.id}/signout" method="post">
+                        <form action="${conference.id}/signout" method="post">
                             <button class="btn btn-danger" type="submit"><fmt:message key="unregisterButton"
                                                                                       bundle="${bundle}"/></button>
                         </form>
@@ -67,7 +67,7 @@
                             <tr style="transform: rotate(0);">
                                 <th scope="col">
                                     <c:if test="${sessionScope.role == 'MODERATOR'}">
-                                        <a href="presentation/${presentation.id}">${presentation.topic}&nbsp;</a>
+                                        <a href="${pageContext.request.contextPath}/presentation/${presentation.id}">${presentation.topic}&nbsp;</a>
                                     </c:if>
                                     <c:if test="${sessionScope.role != 'MODERATOR'}">
                                         <b>${presentation.topic}</b>
@@ -78,7 +78,7 @@
                                 <c:if test="${presentation.speaker == ''}">
                                     <td>
                                         <c:if test="${sessionScope.role == 'SPEAKER'}">
-                                            <form action="presentation/${presentation.id}/suggest-speaker" method="post">
+                                            <form action="${pageContext.request.contextPath}/presentation/${presentation.id}/suggest-speaker" method="post">
                                                 <button class="btn-primary" type="submit"><fmt:message
                                                         key="speakerApplyInscription" bundle="${bundle}"/></button>
                                             </form>
@@ -89,14 +89,15 @@
                                     <td>${presentation.speaker}</td>
                                 </c:if>
                                 <c:if test="${sessionScope.role == 'SPEAKER' || sessionScope.role == 'MODERATOR'}">
-                                    <td><input type="checkbox" disabled checked="${presentation.speakerApproved}"/></td>
-                                    <td><input type="checkbox" disabled checked="${presentation.presentationApproved}"/>
+                                    <td><input type="checkbox" disabled ${presentation.speakerApproved ? 'checked' : ''}/></td>
+                                    <td><input type="checkbox" disabled ${presentation.presentationApproved ? 'checked' : ''}/>
                                     </td>
                                 </c:if>
 
                                 <c:if test="${sessionScope.role == 'MODERATOR'}">
                                     <td>
-                                        <form action="presentation/${presentation.id}/delete" method="post">
+                                        <form action="${pageContext.request.contextPath}/presentation/${presentation.id}/delete" method="post">
+                                            <input type="hidden" name="conferenceId" value="${conference.id}"/>
                                             <button class="btn btn-danger mt-1" type="submit">
                                                 <fmt:message key="deletePresentationButton" bundle="${bundle}"/>
                                             </button>
@@ -110,7 +111,7 @@
             </div>
 
             <c:if test="${sessionScope.role == 'MODERATOR'}">
-                <form action="presentation/create/${conference.id}">
+                <form action="${conference.id}/create-presentation">
                     <button class="btn btn-success" type="submit"><fmt:message key="newPresentationLink"
                                                                                bundle="${bundle}"/></button>
                 </form>
@@ -121,7 +122,7 @@
                 </form>
             </c:if>
             <c:if test="${sessionScope.role == 'SPEAKER'}">
-                <form action="/presentation/suggest/conference/${conference.id}">
+                <form action="${conference.id}/suggest">
                     <button class="btn btn-success mt-1" type="submit">
                         <fmt:message key="suggestPresentationButton" bundle="${bundle}"/>
                     </button>

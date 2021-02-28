@@ -1,11 +1,7 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.conference;
 
 import org.apache.log4j.Logger;
-import org.poliakov.conferencium.dao.conference.MysqlConferenceDaoImpl;
-import org.poliakov.conferencium.model.conference.Conference;
-import org.poliakov.conferencium.properties.PageMappingProperties;
-import org.poliakov.conferencium.service.conference.ConferenceService;
-import org.poliakov.conferencium.service.conference.ConferenceServiceImpl;
+import org.poliakov.conferencium.command.ModeratorServletCommand;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +15,8 @@ public class GetDeleteConferencePageCommand extends ModeratorServletCommand {
     }
 
     @Override
-    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response,
-                                      String[] params) {
+    protected String restrictedExecute(HttpServletRequest request, HttpServletResponse response,
+                                       String[] params) {
         Long conferenceId = Long.parseLong(params[0]);
         return "conference/" + conferenceId + "/delete";
     }

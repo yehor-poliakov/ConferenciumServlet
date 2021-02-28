@@ -58,7 +58,11 @@ public class MysqlPresentationDaoImpl implements PresentationDao {
         try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(createQuery, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, presentation.getConferenceId());
-            statement.setLong(2, presentation.getSpeakerId());
+            if (presentation.getSpeakerId() == null) {
+                statement.setNull(2, java.sql.Types.NULL);
+            } else {
+                statement.setLong(2, presentation.getSpeakerId());
+            }
             statement.setString(3, presentation.getTime().toString());
             statement.setString(4, presentation.getTopic());
             statement.setBoolean(5, presentation.isSpeakerApproved());
@@ -92,7 +96,11 @@ public class MysqlPresentationDaoImpl implements PresentationDao {
 
         try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(updateQuery);
-            statement.setLong(1, presentation.getSpeakerId());
+            if (presentation.getSpeakerId() == null) {
+                statement.setNull(1, java.sql.Types.NULL);
+            } else {
+                statement.setLong(1, presentation.getSpeakerId());
+            }
             statement.setString(2, presentation.getTime().toString());
             statement.setString(3, presentation.getTopic());
             statement.setBoolean(4, presentation.isSpeakerApproved());

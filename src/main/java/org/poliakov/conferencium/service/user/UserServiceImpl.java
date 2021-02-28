@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userDao.findUserByEmail(email);
 
-        if (BCrypt.checkpw(password, user.getPassword())) {
+        if (user != null && BCrypt.checkpw(password, user.getPassword())) {
             return user;
         } else {
             return null;
@@ -78,11 +78,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registerUserForConference(String email, Long conferenceId) {
-        if (email == null) {
-            return false;
-        }
-        boolean registered = userDao.registerUserForConference(email, conferenceId);
+    public boolean registerUserForConference(Long userId, Long conferenceId) {
+        boolean registered = userDao.registerUserForConference(userId, conferenceId);
         return registered;
     }
 
@@ -92,11 +89,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean unregisterUserFromConference(String email, Long conferenceId) {
-        if (email == null) {
-            return false;
-        }
-        boolean unregistered = userDao.unregisterUserFromConference(email, conferenceId);
+    public boolean unregisterUserFromConference(Long userId, Long conferenceId) {
+        boolean unregistered = userDao.unregisterUserFromConference(userId, conferenceId);
         return unregistered;
     }
 

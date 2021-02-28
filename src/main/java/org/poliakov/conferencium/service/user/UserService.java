@@ -10,7 +10,7 @@ public interface UserService {
     User findUserByEmail(String email);
     User findUserById(Long id);
     boolean isParticipant(Long userId, Long conferenceId);
-    boolean registerUserForConference(String email, Long conferenceId);
+    boolean registerUserForConference(Long userId, Long conferenceId);
     Map<Long, String> findAllSpeakersIdAndNames();
-    boolean unregisterUserFromConference(String userName, Long conferenceId);
+    boolean unregisterUserFromConference(Long userId, Long conferenceId);
 }

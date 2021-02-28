@@ -1,6 +1,8 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.conference;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ParticipantServletCommand;
+import org.poliakov.conferencium.command.ServletCommand;
 import org.poliakov.conferencium.dao.user.MysqlUserDaoImpl;
 import org.poliakov.conferencium.properties.PageMappingProperties;
 import org.poliakov.conferencium.service.user.UserService;
@@ -10,30 +12,27 @@ import org.poliakov.conferencium.util.RequestParser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ConferenceUnregistrationCommand implements ServletCommand {
+public class ConferenceUnregistrationCommand extends ParticipantServletCommand {
     private static final Logger LOGGER = Logger.getLogger(ConferenceUnregistrationCommand.class);
 
-    private final RequestParser requestParser;
     private final UserService userService;
 
-    private final String conferencesPageRedirect;
+    private final String conferencePageRedirect;
 
     public ConferenceUnregistrationCommand() {
         LOGGER.info("Starting GetCreateConferencePageCommand");
 
-        requestParser = new RequestParser();
         userService = new UserServiceImpl(MysqlUserDaoImpl.getInstance());
 
-        conferencesPageRedirect = PageMappingProperties.MAIN_PAGE_REDIRECT;
+        conferencePageRedirect = PageMappingProperties.CONFERENCE_REDIRECT;
     }
 
     @Override
-    public String execute (HttpServletRequest request, HttpServletResponse response,
+    public String restrictedExecute (HttpServletRequest request, HttpServletResponse response,
                                       String[] params) {
         Long conferenceId = Long.parseLong(params[0]);
-        String userName = request.getUserPrincipal().getName();
-        Long userId = userService.findUserByEmail(userName).getId();
-        userService.unregisterUserFromConference(userName, conferenceId);
-        return conferencesPageRedirect;
+        Long userId = (Long)request.getSession().getAttribute("id");
+        userService.unregisterUserFromConference(userId, conferenceId);
+        return conferencePageRedirect + conferenceId;
     }
 }

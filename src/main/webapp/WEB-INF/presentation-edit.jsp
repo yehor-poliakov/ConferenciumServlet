@@ -13,60 +13,42 @@
     </jsp:attribute>
     <jsp:body>
         <div class="row">
-            <form action="presentation/${presentation.id}/edit/conference/${presentation.conferenceid}" method="post">
+            <form action="#" method="post">
                 <div class="form-group">
                     <label for="topic"><fmt:message key="topicInscription" bundle="${bundle}"/></label>
-                    <fmt:message key="topicInscription" var="topidInscription"/>
+                    <fmt:message key="topicInscription" var="topicInscription"/>
                     <input class="form-control" type="text" id="topic" name="topic" placeholder="${topicInscription}"
-                           value="${topic}">
+                           value="${presentation.topic}" required>
                 </div>
                 <div class="form-group">
                     <label for="time"><fmt:message key="timeInscription" bundle="${bundle}"/></label>
                     <fmt:message key="timeInscription" var="timeInscription"/>
-                    <input class="form-control" type="text" id="time" name="time" placeholder="${timeInscription}"
-                           value="${time}">
-                </div>
-                <div class="form-group">
-                    <label for="time"><fmt:message key="timeInscription" bundle="${bundle}"/></label>
-                    <fmt:message key="timeInscription" var="timeInscription"/>
-                    <input class="form-control" type="text" id="time" name="time" placeholder="${timeInscription}"
-                           value="${time}">
+                    <input class="form-control" type="time" id="time" name="time" placeholder="${timeInscription}"
+                           value="${presentation.time}" required>
                 </div>
 
-                <div class="input-group mb-2 align-items-center">
-                    <label class="filter-col align-text-bottom mb-0 mr-0" for="speaker">
-                        <fmt:message key="speakerInscription" bundle="${bundle}"/>
-                    </label>
-                    <select name="speaker" id="speaker"
-                            class="form-control custom-select custom-select-sm ml-2 mb-0 align-center"
-                            onChange="this.form.submit()">
-                        <c:forEach items="${speakers}" var="speaker">
-                            <option ${speakers.toString() == orderbyOption ? 'selected' : ''}
-                                    value="${orderbyOption}">
-                            </option>
-                        </c:forEach>
-                    </select>
+                <select class="form-select" name="speakerId">
+                    <option value="${null}" selected><fmt:message key="noSpeakerYetForm" bundle="${bundle}"/></option>
+                    <c:forEach items="${speakers}" var="speaker">
+                        <option ${speaker.key == presentation.speakerId ? 'selected' : ''}
+                                value="${speaker.key}">
+                                ${speaker.value}
+                        </option>
+                    </c:forEach>
+                </select>
+
+                <div class="form-check mt-1">
+                    <input class="form-check-input" type="checkbox" name="speakerApproved" id="speakerApproved" ${presentation.speakerApproved ? 'checked' : ''}>
+                    <label for="speakerApproved"><fmt:message key="speakerApprovedInscription" bundle="${bundle}"/></label>
                 </div>
 
-                <div class="form-check align-items-center h-100">
-                    <input class="form-check-input mt-9" type="checkbox"
-                           name="speakerApproved" ${presentation.speakerApproved ? 'checked' : ''}
-                           id="speakerApproved"/>
-                    <label class="form-check-label align-text-bottom mt-9" for="speakerApproved">
-                        <fmt:message key="speakerApprovedInscription" bundle="${bundle}"/>
-                    </label>
+                <div class="form-check mt-1">
+                    <input class="form-check-input" type="checkbox" name="presentationApproved" id="presentationApproved" ${presentation.presentationApproved ? 'checked' : ''}>
+                    <label for="presentationApproved"><fmt:message key="presentationApprovedInscription" bundle="${bundle}"/></label>
                 </div>
 
-                <div class="form-check align-items-center h-100">
-                    <input class="form-check-input mt-9" type="checkbox"
-                           name="presentationApproved" ${presentation.presentationApproved ? 'checked' : ''}
-                           id="presentationApproved"/>
-                    <label class="form-check-label align-text-bottom mt-9" for="speakerApproved">
-                        <fmt:message key="presentationApprovedInscription" bundle="${bundle}"/>
-                    </label>
-                </div>
+                <input type="hidden" name="conferenceId" value="${presentation.conferenceId}"/>
 
-                <input type="hidden" name="presentationid" value="${presentation.conferenceId}"/>
                 <button type="submit" class="btn btn-primary"><fmt:message key="editPresentationButton"
                                                                            bundle="${bundle}"/></button>
             </form>

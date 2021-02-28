@@ -1,9 +1,11 @@
 package org.poliakov.conferencium.command;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.conference.*;
+import org.poliakov.conferencium.command.login.*;
+import org.poliakov.conferencium.command.presentation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -32,10 +34,10 @@ public class CommandManager {
         getCommands.put("/conference/create", new GetCreateConferencePageCommand());
         getCommands.put("/conference/(\\d+)", new GetConferencePageCommand());
         getCommands.put("/conference/(\\d+)/edit", new GetEditConferencePageCommand());
-        getCommands.put("/conference/(\\d+)/delete", new GetDeleteConferencePageCommand());
-        getCommands.put("/presentation/create/conference/(\\d+)", new GetCreatePresentationPageCommand());
-        getCommands.put("/presentation/suggest/conference/(\\d+)", new GetSuggestPresentationPageCommand());
-        getCommands.put("/presentation/(\\d+)/edit/conference/(\\d+)", new GetEditPresentationPageCommand());
+
+        getCommands.put("/conference/(\\d+)/create-presentation", new GetCreatePresentationPageCommand());
+        getCommands.put("/conference/(\\d+)/suggest", new GetSuggestPresentationPageCommand());
+        getCommands.put("/presentation/(\\d+)", new GetEditPresentationPageCommand());
         getCommands.put("/cabinet", new GetCabinetPageCommand());
 
         postCommands.put("/login", new LoginCommand());
@@ -43,12 +45,14 @@ public class CommandManager {
         postCommands.put("/conference/create", new CreateConferenceCommand());
         postCommands.put("/conference/(\\d+)/edit", new EditConferenceCommand());
         postCommands.put("/conference/(\\d+)/delete", new DeleteConferenceCommand());
-        postCommands.put("/presentation/create/conference/(\\d+)", new CreatePresentationCommand());
-        postCommands.put("/presentation/(\\d+)/edit/conference/(\\d+)", new EditPresentationCommand());
-        postCommands.put("/presentation/suggest/conference/(\\d+)", new SuggestPresentationCommand());
-        postCommands.put("/registration", new RegistrationCommand());
         postCommands.put("/conference/(\\d+)/signup", new ConferenceRegistrationCommand());
         postCommands.put("/conference/(\\d+)/signout", new ConferenceUnregistrationCommand());
+        postCommands.put("/conference/(\\d+)/create-presentation", new CreatePresentationCommand());
+        postCommands.put("/conference/(\\d+)/suggest", new SuggestPresentationCommand());
+        postCommands.put("/presentation/(\\d+)", new EditPresentationCommand());
+        postCommands.put("/presentation/(\\d+)/delete", new DeletePresentationCommand());
+        postCommands.put("/presentation/(\\d+)/suggest-speaker", new SuggestSpeakerCommand());
+        postCommands.put("/registration", new RegistrationCommand());
     }
 
     /**

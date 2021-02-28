@@ -13,7 +13,7 @@
     </jsp:attribute>
     <jsp:body>
         <div class="row">
-            <form action="conference/${conferenceId}/edit" method="post">
+            <form action="#" method="post">
                 <div class="form-group">
                     <label for="title"><fmt:message key="TitleInscription" bundle="${bundle}"/></label>
                     <fmt:message key="TitleInscription" var="titleInscription" />

@@ -1,6 +1,7 @@
-package org.poliakov.conferencium.command;
+package org.poliakov.conferencium.command.conference;
 
 import org.apache.log4j.Logger;
+import org.poliakov.conferencium.command.ModeratorServletCommand;
 import org.poliakov.conferencium.dao.conference.MysqlConferenceDaoImpl;
 import org.poliakov.conferencium.model.conference.Conference;
 import org.poliakov.conferencium.properties.PageMappingProperties;
@@ -32,8 +33,8 @@ public class CreateConferenceCommand extends ModeratorServletCommand {
     }
 
     @Override
-    protected String moderatorExecute(HttpServletRequest request, HttpServletResponse response,
-                                      String[] params) {
+    protected String restrictedExecute(HttpServletRequest request, HttpServletResponse response,
+                                       String[] params) {
         System.out.println("createcommand");
         Conference conference = requestParser.parseConference(request);
 
