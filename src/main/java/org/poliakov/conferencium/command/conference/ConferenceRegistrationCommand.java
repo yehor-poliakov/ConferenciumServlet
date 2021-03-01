@@ -18,11 +18,13 @@ public class ConferenceRegistrationCommand extends ParticipantServletCommand {
     private final String conferencePageRedirect;
 
     public ConferenceRegistrationCommand() {
+        this(new UserServiceImpl(MysqlUserDaoImpl.getInstance()));
+    }
+
+    public ConferenceRegistrationCommand(UserService userService) {
         LOGGER.info("Starting GetCreateConferencePageCommand");
-
-        userService = new UserServiceImpl(MysqlUserDaoImpl.getInstance());
-
         conferencePageRedirect = PageMappingProperties.CONFERENCE_REDIRECT;
+        this.userService = userService;
     }
 
     @Override
