@@ -1,4 +1,4 @@
-package org.poliakov.conferencium.commands;
+package org.poliakov.conferencium.commands.conference;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.poliakov.conferencium.command.conference.ConferenceRegistrationCommand;
+import org.poliakov.conferencium.command.conference.ConferenceUnregistrationCommand;
 import org.poliakov.conferencium.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,15 +17,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ConferenceRegistrationCommandTests {
+public class ConferenceUnregistrationCommandTests {
     @Mock
     private UserService userService;
 
-    private ConferenceRegistrationCommand conferenceRegistrationCommand;
+    private ConferenceUnregistrationCommand conferenceUnregistrationCommand;
 
     @Before
     public void init() {
-        conferenceRegistrationCommand = new ConferenceRegistrationCommand(userService);
+        conferenceUnregistrationCommand = new ConferenceUnregistrationCommand(userService);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ConferenceRegistrationCommandTests {
         String[] params = new String[] { "9" };
 
         // act
-        String actual = conferenceRegistrationCommand.restrictedExecute(request, response, params);
+        String actual = conferenceUnregistrationCommand.restrictedExecute(request, response, params);
 
         // assert
         Assert.assertEquals("redirect:conference/9", actual);

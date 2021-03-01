@@ -1,7 +1,7 @@
 package org.poliakov.conferencium.dao.presentation;
 
 import org.apache.log4j.Logger;
-import org.poliakov.conferencium.connection.ConnectionPool;
+import org.poliakov.conferencium.connection.ConnectionPoolImpl;
 import org.poliakov.conferencium.model.presentation.Presentation;
 import org.poliakov.conferencium.model.presentation.PresentationBuilder;
 import org.poliakov.conferencium.model.presentation.PresentationDetails;
@@ -16,7 +16,7 @@ public class MysqlPresentationDaoImpl implements PresentationDao {
     private static final Logger LOGGER = Logger.getLogger(MysqlPresentationDaoImpl.class);
 
     private static MysqlPresentationDaoImpl INSTANCE;
-    private static ConnectionPool connectionPool;
+    private static ConnectionPoolImpl connectionPool;
 
     private static String createQuery;
     private static String updateQuery;
@@ -31,7 +31,7 @@ public class MysqlPresentationDaoImpl implements PresentationDao {
     private MysqlPresentationDaoImpl() {
         LOGGER.info("Starting MysqlPresentationDaoImpl");
 
-        connectionPool = ConnectionPool.getInstance();
+        connectionPool = ConnectionPoolImpl.getInstance();
         MysqlQueryProperties properties = MysqlQueryProperties.getInstance();
 
         createQuery = properties.getProperty("createPresentation");

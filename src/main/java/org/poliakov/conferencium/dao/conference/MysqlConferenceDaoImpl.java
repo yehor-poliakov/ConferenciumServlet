@@ -2,6 +2,7 @@ package org.poliakov.conferencium.dao.conference;
 
 import org.apache.log4j.Logger;
 import org.poliakov.conferencium.connection.ConnectionPool;
+import org.poliakov.conferencium.connection.ConnectionPoolImpl;
 import org.poliakov.conferencium.model.conference.Conference;
 import org.poliakov.conferencium.model.conference.ConferenceBuilder;
 import org.poliakov.conferencium.model.conference.ConferenceSearchFilters;
@@ -25,10 +26,10 @@ public class MysqlConferenceDaoImpl implements ConferenceDao {
     private static String findAllQuery;
     private static String countAllQuery;
 
-    private MysqlConferenceDaoImpl() {
+    private MysqlConferenceDaoImpl(ConnectionPool pool) {
         LOGGER.info("Starting MysqlConferenceDaoImpl");
 
-        connectionPool = ConnectionPool.getInstance();
+        connectionPool = pool;
         MysqlQueryProperties properties = MysqlQueryProperties.getInstance();
 
         createQuery = properties.getProperty("createConference");
@@ -39,9 +40,20 @@ public class MysqlConferenceDaoImpl implements ConferenceDao {
         countAllQuery = properties.getProperty("countAllConferences");
     }
 
+    private MysqlConferenceDaoImpl() {
+        this(ConnectionPoolImpl.getInstance());
+    }
+
     public static MysqlConferenceDaoImpl getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new MysqlConferenceDaoImpl();
+        }
+        return INSTANCE;
+    }
+
+    public static MysqlConferenceDaoImpl getInstance(ConnectionPool pool) {
+        if (INSTANCE == null) {
+            INSTANCE = new MysqlConferenceDaoImpl(pool);
         }
         return INSTANCE;
     }

@@ -1,25 +1,21 @@
 package org.poliakov.conferencium.dao.user;
 
 import org.apache.log4j.Logger;
-import org.poliakov.conferencium.connection.ConnectionPool;
-import org.poliakov.conferencium.model.presentation.PresentationDetails;
-import org.poliakov.conferencium.model.presentation.PresentationDetailsBuilder;
+import org.poliakov.conferencium.connection.ConnectionPoolImpl;
 import org.poliakov.conferencium.model.user.User;
 import org.poliakov.conferencium.model.user.UserBuilder;
 import org.poliakov.conferencium.model.user.UserRole;
 import org.poliakov.conferencium.properties.MysqlQueryProperties;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MysqlUserDaoImpl implements UserDao {
     private static final Logger LOGGER = Logger.getLogger(MysqlUserDaoImpl.class);
 
     private static MysqlUserDaoImpl INSTANCE;
-    private final ConnectionPool connectionPool;
+    private final ConnectionPoolImpl connectionPool;
 
     private final String createQuery;
     private final String findByIdQuery;
@@ -33,7 +29,7 @@ public class MysqlUserDaoImpl implements UserDao {
     public MysqlUserDaoImpl() {
         LOGGER.info("Starting MysqlUserDaoImpl");
 
-        connectionPool = ConnectionPool.getInstance();
+        connectionPool = ConnectionPoolImpl.getInstance();
         MysqlQueryProperties properties = MysqlQueryProperties.getInstance();
 
         createQuery = properties.getProperty("createUser");

@@ -26,7 +26,8 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("New user registration");
         String hash = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(10));
         user.setPassword(hash);
-        return user != null && userDao.createUser(user).getId() != null;
+        User userCreated= userDao.createUser(user);
+        return userCreated.getId() != null;
     }
 
     @Override
@@ -93,6 +94,5 @@ public class UserServiceImpl implements UserService {
         boolean unregistered = userDao.unregisterUserFromConference(userId, conferenceId);
         return unregistered;
     }
-
 
 }

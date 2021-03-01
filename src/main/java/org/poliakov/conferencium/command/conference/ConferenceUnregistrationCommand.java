@@ -20,18 +20,20 @@ public class ConferenceUnregistrationCommand extends ParticipantServletCommand {
     private final String conferencePageRedirect;
 
     public ConferenceUnregistrationCommand() {
+        this(new UserServiceImpl(MysqlUserDaoImpl.getInstance()));
+    }
+
+    public ConferenceUnregistrationCommand(UserService userService) {
         LOGGER.info("Starting GetCreateConferencePageCommand");
-
-        userService = new UserServiceImpl(MysqlUserDaoImpl.getInstance());
-
         conferencePageRedirect = PageMappingProperties.CONFERENCE_REDIRECT;
+        this.userService = userService;
     }
 
     @Override
-    public String restrictedExecute (HttpServletRequest request, HttpServletResponse response,
-                                      String[] params) {
+    public String restrictedExecute(HttpServletRequest request, HttpServletResponse response,
+                                    String[] params) {
         Long conferenceId = Long.parseLong(params[0]);
-        Long userId = (Long)request.getSession().getAttribute("id");
+        Long userId = (Long) request.getSession().getAttribute("id");
         userService.unregisterUserFromConference(userId, conferenceId);
         return conferencePageRedirect + conferenceId;
     }

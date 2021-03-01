@@ -3,10 +3,13 @@ package org.poliakov.conferencium.command.conference;
 import org.apache.log4j.Logger;
 import org.poliakov.conferencium.command.ModeratorServletCommand;
 import org.poliakov.conferencium.dao.conference.MysqlConferenceDaoImpl;
+import org.poliakov.conferencium.dao.user.MysqlUserDaoImpl;
 import org.poliakov.conferencium.model.conference.Conference;
 import org.poliakov.conferencium.properties.PageMappingProperties;
 import org.poliakov.conferencium.service.conference.ConferenceService;
 import org.poliakov.conferencium.service.conference.ConferenceServiceImpl;
+import org.poliakov.conferencium.service.user.UserService;
+import org.poliakov.conferencium.service.user.UserServiceImpl;
 import org.poliakov.conferencium.util.RequestParser;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,20 +25,23 @@ public class CreateConferenceCommand extends ModeratorServletCommand {
     private final String conferencesPageRedirect;
 
     public CreateConferenceCommand() {
+        this(new ConferenceServiceImpl(MysqlConferenceDaoImpl.getInstance()),
+                new RequestParser());
+    }
+
+    public CreateConferenceCommand(ConferenceService conferenceService, RequestParser requestParser) {
         LOGGER.info("Starting CreateConferenceCommand");
 
-        requestParser = new RequestParser();
-        conferenceService = new ConferenceServiceImpl(MysqlConferenceDaoImpl.getInstance());
+        this.requestParser = requestParser;
+        this.conferenceService = conferenceService;
 
         page = PageMappingProperties.CREATE_CONFERENCE_PAGE;
         conferencesPageRedirect = PageMappingProperties.MAIN_PAGE_REDIRECT;
-
     }
 
     @Override
-    protected String restrictedExecute(HttpServletRequest request, HttpServletResponse response,
+    public String restrictedExecute(HttpServletRequest request, HttpServletResponse response,
                                        String[] params) {
-        System.out.println("createcommand");
         Conference conference = requestParser.parseConference(request);
 
         boolean error = false;
